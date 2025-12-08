@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+      
+      - name: Get version from tag
+        id: tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      
+      - name: Build binaries
+        run: |
+          mkdir -p dist
+          
+          # Linux AMD64
+          GOOS=linux GOARCH=amd64 go build -ldflags="-X github.com/roman-senchuk/tglint/cmd.Version=${{ steps.tag.outputs.VERSION }}" -o dist/tglint-linux-amd64 .
+          
+          # Linux ARM64
+          GOOS=linux GOARCH=arm64 go build -ldflags="-X github.com/roman-senchuk/tglint/cmd.Version=${{ steps.tag.outputs.VERSION }}" -o dist/tglint-linux-arm64 .
+          
+          # macOS AMD64
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-X github.com/roman-senchuk/tglint/cmd.Version=${{ steps.tag.outputs.VERSION }}" -o dist/tglint-darwin-amd64 .
+          
+          # macOS ARM64 (Apple Silicon)
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-X github.com/roman-senchuk/tglint/cmd.Version=${{ steps.tag.outputs.VERSION }}" -o dist/tglint-darwin-arm64 .
+          
+          # Windows AMD64
+          GOOS=windows GOARCH=amd64 go build -ldflags="-X github.com/roman-senchuk/tglint/cmd.Version=${{ steps.tag.outputs.VERSION }}" -o dist/tglint-windows-amd64.exe .
+      
+      - name: Create checksums
+        run: |
+          cd dist
+          sha256sum tglint-linux-amd64 > tglint-linux-amd64.sha256
+          sha256sum tglint-linux-arm64 > tglint-linux-arm64.sha256
+          sha256sum tglint-darwin-amd64 > tglint-darwin-amd64.sha256
+          sha256sum tglint-darwin-arm64 > tglint-darwin-arm64.sha256
+          sha256sum tglint-windows-amd64.exe > tglint-windows-amd64.exe.sha256
+      
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/tglint-*
+          body: |
+            ## tglint ${{ steps.tag.outputs.VERSION }}
+            
+            ### Installation
+            
+            Download the binary for your platform:
+            
+            - **Linux AMD64**: `tglint-linux-amd64`
+            - **Linux ARM64**: `tglint-linux-arm64`
+            - **macOS AMD64**: `tglint-darwin-amd64`
+            - **macOS ARM64** (Apple Silicon): `tglint-darwin-arm64`
+            - **Windows AMD64**: `tglint-windows-amd64.exe`
+            
+            ### Quick Start
+            
+            ```bash
+            # Make binary executable (Linux/macOS)
+            chmod +x tglint-linux-amd64
+            mv tglint-linux-amd64 /usr/local/bin/tglint
+            
+            # Or install via Go
+            go install github.com/roman-senchuk/tglint@${{ steps.tag.outputs.VERSION }}
+            ```
+            
+            ### Checksums
+            
+            SHA256 checksums are included for verification.
+          draft: false
+          prerelease: ${{ contains(steps.tag.outputs.VERSION, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
