@@ -1,5 +1,15 @@
 # Homebrew Installation
 
+## Quick Setup
+
+Use the setup script to create your Homebrew tap:
+
+```bash
+./scripts/setup-homebrew-tap.sh
+```
+
+Then follow the instructions it prints.
+
 ## Option 1: Custom Tap (Recommended)
 
 Create a custom Homebrew tap repository and add the formula there.
