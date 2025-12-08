@@ -8,7 +8,7 @@ A fast, CI-friendly formatter and linter for Terragrunt HCL files.
 - **Lint** with configurable rules
 - **CI-friendly** with `--check` mode and proper exit codes
 - **Fast** - no dependency on Terragrunt or Terraform CLI
-- **Independent** - pure Go implementation using HCL v2
+- **Independent** - pure Go implementation
 
 ## Installation
 
@@ -98,14 +98,6 @@ tglint lint --skip-rules remote_state_required
 tglint lint --skip-rules remote_state_required,forbid_absolute_paths
 ```
 
-## File Discovery
-
-tglint automatically:
-
-- Finds all `terragrunt.hcl` files recursively
-- Skips `.terraform/` and `.terragrunt-cache/` directories
-- Respects `.gitignore` files
-- Supports optional `.tglintignore` file
 
 ## Exit Codes
 
@@ -155,35 +147,43 @@ jobs:
 tglint:
   image: golang:1.21
   script:
-    - go install github.com/tglint/tglint@latest
+    - go install github.com/roman-senchuk/tglint@latest
     - tglint fmt --check
     - tglint lint
 ```
 
 ## Examples
 
-### Format output
+### Format Output
 
-```
+```bash
 $ tglint fmt
 FORMAT live/prod/eks/terragrunt.hcl
 FORMAT live/staging/vpc/terragrunt.hcl
+
+Formatted 2 file(s) recursively
 ```
 
-### Check output (unformatted)
+### Check Formatting (CI)
 
-```
+```bash
 $ tglint fmt --check
 ERROR: live/prod/eks/terragrunt.hcl is not formatted
 ```
 
-### Lint output
+### Lint Output
 
-```
+```bash
 $ tglint lint
 live/prod/eks/terragrunt.hcl:5:1: terraform.source is required (terraform_source_required)
 live/staging/vpc/terragrunt.hcl:12:3: hardcoded AWS account ID detected (forbid_hardcoded_aws_account_id)
 ```
+
+## Notes
+
+- Automatically skips `.terraform/` and `.terragrunt-cache/` directories
+- Respects `.gitignore` files
+- Supports optional `.tglintignore` file
 
 ## License
 

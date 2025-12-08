@@ -21,9 +21,3 @@ echo "Building tglint..."
 go build -o tglint .
 
 echo "Build successful! Binary created: ./tglint"
-echo ""
-echo "To install globally:"
-echo "  go install ."
-echo ""
-echo "To test:"
-echo "  ./tglint --help"
