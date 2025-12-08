@@ -12,16 +12,36 @@ A fast, CI-friendly formatter and linter for Terragrunt HCL files.
 
 ## Installation
 
+### Via Go Install
+
 ```bash
 go install github.com/roman-senchuk/tglint@latest
 ```
 
-Or build from source:
+**Note**: Make sure `$HOME/go/bin` (or `$GOPATH/bin`) is in your PATH. Add this to your `~/.zshrc` or `~/.bashrc`:
+
+```bash
+export PATH="$HOME/go/bin:$PATH"
+```
+
+Then reload your shell:
+```bash
+source ~/.zshrc  # or source ~/.bashrc
+```
+
+### Build from Source
 
 ```bash
 git clone https://github.com/roman-senchuk/tglint.git
 cd tglint
 go build -o tglint
+sudo mv tglint /usr/local/bin/  # Optional: install system-wide
+```
+
+### Verify Installation
+
+```bash
+tglint --version
 ```
 
 ## Usage
