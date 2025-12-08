@@ -50,11 +50,64 @@ jobs:
           sha256sum tglint-darwin-arm64 > tglint-darwin-arm64.sha256
           sha256sum tglint-windows-amd64.exe > tglint-windows-amd64.exe.sha256
       
+      - name: Generate Homebrew formula
+        id: formula
+        run: |
+          VERSION="${{ steps.tag.outputs.VERSION }}"
+          SHA256_DARWIN_AMD64=$(sha256sum dist/tglint-darwin-amd64 | cut -d' ' -f1)
+          SHA256_DARWIN_ARM64=$(sha256sum dist/tglint-darwin-arm64 | cut -d' ' -f1)
+          SHA256_LINUX_AMD64=$(sha256sum dist/tglint-linux-amd64 | cut -d' ' -f1)
+          SHA256_LINUX_ARM64=$(sha256sum dist/tglint-linux-arm64 | cut -d' ' -f1)
+          
+          cat > dist/tglint.rb <<EOF
+          class Tglint < Formula
+            desc "Formatter and linter for Terragrunt HCL files"
+            homepage "https://github.com/roman-senchuk/tglint"
+            version "${VERSION}"
+            license "MIT"
+
+            if OS.mac?
+              if Hardware::CPU.intel?
+                url "https://github.com/roman-senchuk/tglint/releases/download/${VERSION}/tglint-darwin-amd64"
+                sha256 "${SHA256_DARWIN_AMD64}"
+              else
+                url "https://github.com/roman-senchuk/tglint/releases/download/${VERSION}/tglint-darwin-arm64"
+                sha256 "${SHA256_DARWIN_ARM64}"
+              end
+            elsif OS.linux?
+              if Hardware::CPU.intel?
+                url "https://github.com/roman-senchuk/tglint/releases/download/${VERSION}/tglint-linux-amd64"
+                sha256 "${SHA256_LINUX_AMD64}"
+              else
+                url "https://github.com/roman-senchuk/tglint/releases/download/${VERSION}/tglint-linux-arm64"
+                sha256 "${SHA256_LINUX_ARM64}"
+              end
+            end
+
+            def install
+              binary_name = if OS.mac?
+                Hardware::CPU.intel? ? "tglint-darwin-amd64" : "tglint-darwin-arm64"
+              else
+                Hardware::CPU.intel? ? "tglint-linux-amd64" : "tglint-linux-arm64"
+              end
+              
+              bin.install binary_name => "tglint"
+            end
+
+            test do
+              system "#{bin}/tglint", "--version"
+            end
+          end
+          EOF
+          
+          echo "FORMULA_PATH=dist/tglint.rb" >> $GITHUB_OUTPUT
+      
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             dist/tglint-*
+            dist/tglint.rb
           body: |
             ## tglint ${{ steps.tag.outputs.VERSION }}
             
@@ -82,6 +135,15 @@ jobs:
             ### Checksums
             
             SHA256 checksums are included for verification.
+            
+            ### Homebrew
+            
+            Install via Homebrew tap:
+            ```bash
+            brew install roman-senchuk/tglint/tglint
+            ```
+            
+            Or add the formula manually from the `tglint.rb` file attached to this release.
           draft: false
           prerelease: ${{ contains(steps.tag.outputs.VERSION, '-') }}
         env:
