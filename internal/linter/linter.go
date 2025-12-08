@@ -6,7 +6,7 @@ import (
 
 	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclsyntax"
-	"github.com/tglint/tglint/internal/rules"
+	"github.com/roman-senchuk/tglint/internal/rules"
 )
 
 // Linter runs linting rules on HCL files

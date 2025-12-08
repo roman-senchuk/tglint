@@ -13,13 +13,13 @@ A fast, CI-friendly formatter and linter for Terragrunt HCL files.
 ## Installation
 
 ```bash
-go install github.com/tglint/tglint@latest
+go install github.com/roman-senchuk/tglint@latest
 ```
 
 Or build from source:
 
 ```bash
-git clone https://github.com/tglint/tglint.git
+git clone https://github.com/roman-senchuk/tglint.git
 cd tglint
 go build -o tglint
 ```
@@ -140,7 +140,7 @@ jobs:
           go-version: '1.21'
       
       - name: Install tglint
-        run: go install github.com/tglint/tglint@latest
+        run: go install github.com/roman-senchuk/tglint@latest
       
       - name: Check formatting
         run: tglint fmt --check

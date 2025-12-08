@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/tglint/tglint/internal/linter"
-	"github.com/tglint/tglint/internal/rules"
-	"github.com/tglint/tglint/internal/walker"
+	"github.com/roman-senchuk/tglint/internal/linter"
+	"github.com/roman-senchuk/tglint/internal/rules"
+	"github.com/roman-senchuk/tglint/internal/walker"
 )
 
 var skipRulesFlag string

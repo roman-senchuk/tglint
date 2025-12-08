@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
-	"github.com/tglint/tglint/internal/formatter"
-	"github.com/tglint/tglint/internal/walker"
+	"github.com/roman-senchuk/tglint/internal/formatter"
+	"github.com/roman-senchuk/tglint/internal/walker"
 )
 
 var checkFlag bool
