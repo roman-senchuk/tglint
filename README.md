@@ -29,13 +29,22 @@ Then reload your shell:
 source ~/.zshrc  # or source ~/.bashrc
 ```
 
-### Build from Source
+### Build from Source Linux
 
 ```bash
 git clone https://github.com/roman-senchuk/tglint.git
 cd tglint
 go build -o tglint
 sudo mv tglint /usr/local/bin/  # Optional: install system-wide
+```
+
+### Build from Source MacOs
+
+```bash
+git clone https://github.com/roman-senchuk/tglint.git
+cd tglint
+go build -o tglint
+mv tglint ~/.local/bin/  # Optional: install system-wide
 ```
 
 ### Verify Installation
