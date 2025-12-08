@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+      
+      - name: Install dependencies
+        run: go mod download
+      
+      - name: Run tests
+        run: go test ./...
+      
+      - name: Build
+        run: go build -o tglint .
+      
+      - name: Test format command
+        run: ./tglint fmt --check .
+      
+      - name: Test lint command
+        run: ./tglint lint . || true
