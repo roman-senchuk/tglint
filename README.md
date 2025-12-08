@@ -40,12 +40,6 @@ Format files in a specific directory (recursively):
 tglint fmt ./infrastructure
 ```
 
-The formatter automatically:
-- Recursively searches for all `terragrunt.hcl` files
-- Formats each file using canonical HCL formatting
-- Shows which files were formatted
-- Provides a summary of formatted files
-
 ### Check formatting (CI mode)
 
 Check if files are formatted without modifying them:
