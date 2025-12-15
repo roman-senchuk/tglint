@@ -19,7 +19,7 @@ var versionCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
-	
+
 	// Add --version flag to root command
 	rootCmd.Version = Version
 	rootCmd.SetVersionTemplate("tglint version {{.Version}}\n")
