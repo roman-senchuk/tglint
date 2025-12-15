@@ -57,7 +57,7 @@ tglint --version
 
 ### Format files
 
-Format all `terragrunt.hcl` files recursively (default behavior):
+Format all `terragrunt.hcl` and `.tf` files recursively (default behavior):
 
 ```bash
 tglint fmt
@@ -68,6 +68,8 @@ Format files in a specific directory (recursively):
 ```bash
 tglint fmt ./infrastructure
 ```
+
+The formatter ensures files end with a newline and uses canonical HCL formatting.
 
 ### Check formatting (CI mode)
 
@@ -204,6 +206,8 @@ live/staging/vpc/terragrunt.hcl:12:3: hardcoded AWS account ID detected (forbid_
 
 ## Notes
 
+- Formats both `terragrunt.hcl` and `.tf` files
+- Ensures files end with a newline
 - Automatically skips `.terraform/` and `.terragrunt-cache/` directories
 - Respects `.gitignore` files
 - Supports optional `.tglintignore` file
