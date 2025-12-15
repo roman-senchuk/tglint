@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/hcl/v2/hclwrite"
 )
 
-// Format formats a Terragrunt HCL file
+// Format formats a Terraform/Terragrunt HCL file
 func Format(filePath string) ([]byte, error) {
 	src, err := os.ReadFile(filePath)
 	if err != nil {
@@ -23,6 +23,12 @@ func Format(filePath string) ([]byte, error) {
 
 	// Format returns canonical HCL
 	formatted := f.Bytes()
+	
+	// Ensure file ends with a newline
+	if len(formatted) > 0 && formatted[len(formatted)-1] != '\n' {
+		formatted = append(formatted, '\n')
+	}
+	
 	return formatted, nil
 }
 

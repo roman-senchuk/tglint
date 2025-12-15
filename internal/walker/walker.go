@@ -15,7 +15,7 @@ type WalkOptions struct {
 	TglintIgnore  string
 }
 
-// Walk finds all terragrunt.hcl files recursively
+// Walk finds all terragrunt.hcl and .tf files recursively
 func Walk(opts WalkOptions) ([]string, error) {
 	var files []string
 	var gitignoreMatcher *gitignore.GitIgnore
@@ -53,8 +53,12 @@ func Walk(opts WalkOptions) ([]string, error) {
 			return nil
 		}
 
-		// Only process terragrunt.hcl files
-		if info.Name() != "terragrunt.hcl" {
+		// Process terragrunt.hcl and .tf files
+		name := info.Name()
+		isTerragrunt := name == "terragrunt.hcl"
+		isTerraform := strings.HasSuffix(name, ".tf")
+		
+		if !isTerragrunt && !isTerraform {
 			return nil
 		}
 

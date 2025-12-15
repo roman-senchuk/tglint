@@ -14,8 +14,8 @@ var checkFlag bool
 
 var fmtCmd = &cobra.Command{
 	Use:   "fmt [path]",
-	Short: "Format terragrunt.hcl files",
-	Long:  `Format terragrunt.hcl files recursively. Use --check to verify formatting without modifying files.`,
+	Short: "Format Terraform and Terragrunt HCL files",
+	Long:  `Format terragrunt.hcl and .tf files recursively. Use --check to verify formatting without modifying files.`,
 	Args:  cobra.MaximumNArgs(1),
 	RunE:  runFmt,
 }
@@ -50,7 +50,7 @@ func runFmt(cmd *cobra.Command, args []string) error {
 
 	if len(files) == 0 {
 		if !checkFlag {
-			fmt.Printf("No terragrunt.hcl files found in %s\n", absPath)
+			fmt.Printf("No Terraform or Terragrunt files found in %s\n", absPath)
 		}
 		return nil
 	}

@@ -1,11 +1,11 @@
 # tglint
 
-A fast, CI-friendly formatter and linter for Terragrunt HCL files.
+A fast, CI-friendly formatter and linter for Terraform and Terragrunt HCL files.
 
 ## Features
 
-- **Format** `terragrunt.hcl` files recursively with canonical HCL formatting
-- **Lint** with configurable rules
+- **Format** `terragrunt.hcl` and `.tf` files recursively with canonical HCL formatting
+- **Lint** Terragrunt files with configurable rules
 - **CI-friendly** with `--check` mode and proper exit codes
 - **Fast** - no dependency on Terragrunt or Terraform CLI
 - **Independent** - pure Go implementation
